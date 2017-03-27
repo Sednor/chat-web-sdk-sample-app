@@ -1,10 +1,15 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+
 import Avatar from 'components/Avatar';
 import ChatMedia from 'components/ChatMedia';
+import Embedly from 'components/Embedly';
+
 import { log, mapMessageToEntity } from 'utils';
+import { isUrl } from 'utils/url';
+
 import zChat from 'vendor/web-sdk';
 
 class ChatMessage extends Component {
@@ -53,6 +58,12 @@ class ChatMessage extends Component {
   }
 
   renderMessagePart(msg) {
+    if (isUrl(msg.msg)) {
+      return (
+        <Embedly url={msg.msg}/>
+      );
+    }
+
     switch (msg.type) {
       case 'chat.file':
         return <ChatMedia message={msg} />;
@@ -89,6 +100,6 @@ ChatMessage.defaultProps = {
   message: {
     msg: ''
   }
-}
+};
 
 export default connect()(ChatMessage);
